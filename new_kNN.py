@@ -35,14 +35,43 @@ import math
 #
 #    return dataMat,labelMat
 
-df = pd.read_excel('C:/Users/Adm/Desktop/electricitry/result_zip.xlsx',encoding='utf-8')
-id = df['id']
+def fun1(value,t):
+    result = round((value * t), 3)
+    return result
+
+def fun2(value):
+    t = random.randint(1, 8) / 10
+    result = round((value * t), 3)
+    return result
+    
+def fun3(average3):
+    t = random.randint(1, 8) / 10
+    result = round((average3 * t),3)
+    return result
+
+def fun4(t,average4):
+    result = round((average4 * t),3)
+    return result
+
+df = pd.read_excel('C:/Users/Adm/Desktop/electricitry/bad_sample/all_user.xlsx',encoding='utf-8')
+id = df['userId']
 consumption = df['consumption']
 consumption = np.array(consumption)
+#print(consumption[0:365])
+#print(consumption[1*365:365*2])
+
+all_result = []
+
+for k in range(0,148):
+    print(k)
+    #print(i*365)
+    #print((i+1)*365)
+    user_consumption = consumption[k*365:(k+1)*365]
+    print(user_consumption)
 #time = df['time']
-date = df['date']
-tempearture = df['tempearture']
-humidity = df['humidity']
+#date = df['date']
+#tempearture = df['tempearture']
+#humidity = df['humidity']
 #print(consumption)
 #h1(xt) = αxt, α = random(0.1, 0.8); 通过生成0.1到0.8之间的随机数乘上每条用电量数据作为不诚实的用户用电量
 #index1 = 0
@@ -56,78 +85,61 @@ humidity = df['humidity']
 
 
 
-consumption1 = consumption[0:73]
-consumption2 = consumption[73:146]
-consumption3 = consumption[146:219]
-average3 = np.average(consumption3)
-consumption4 = consumption[219:292]
-average4 = np.average(consumption4)
-consumption5 = consumption[292:365]
-
-
-def fun1(value,t):
-    result = round((value * t), 3)
-    return result
-
-def fun2(value):
-    t = random.randint(1, 8) / 10
-    result = round((value * t), 3)
-    return result
+    consumption1 = user_consumption[0:73]
+    consumption2 = user_consumption[73:146]
+    consumption3 = user_consumption[146:219]
+    average3 = np.average(consumption3)
+    consumption4 = user_consumption[219:292]
+    average4 = np.average(consumption4)
+    consumption5 = user_consumption[292:365]
     
-def fun3():
+    
+
+
+
     t = random.randint(1, 8) / 10
-    result = round((average3 * t),3)
-    return result
+    result1 = []
+    for i in range(0,len(consumption1)):
+        temp = fun1(consumption1[i],t)
+        result1.append(temp)
+    #print(result1)
+    
+    result2 = []
+    for i in range(0,len(consumption2)):
+        temp = fun2(consumption2[i])
+        result2.append(temp)
+    #print(result2)
+    
+    result3 = []
+    for i in range(0,len(consumption3)):
+        temp = fun3(average3)
+        result3.append(temp)
+    #print(result3)
+    
+    result4 = []
+    for i in range(0,len(consumption4)):
+        temp = fun4(t,average4)
+        result4.append(temp)
+    #print(result4)
+    
+    result5 = []
+    for i in range(len(consumption5)-1,-1,-1):
+        temp = consumption5[i]
+        result5.append(temp)
+    #print(result5)
+    temp = []
+    temp = result1+result2+result3+result4+result5
+    print(temp)
+    all_result = all_result + temp
+#
+#print(result)
+#print(max(result))
+#
+#print(len(result))
+#
+yy = pd.DataFrame(all_result)
 
-def fun4(t):
-    result = round((average4 * t),3)
-    return result
-
-
-
-print(consumption5)
-print(consumption1)
-t = random.randint(1, 8) / 10
-result1 = []
-for i in range(0,len(consumption1)):
-    temp = fun1(consumption1[i],t)
-    result1.append(temp)
-#print(result1)
-
-result2 = []
-for i in range(0,len(consumption2)):
-    temp = fun2(consumption2[i])
-    result2.append(temp)
-#print(result2)
-
-result3 = []
-for i in range(0,len(consumption3)):
-    temp = fun3()
-    result3.append(temp)
-#print(result3)
-
-result4 = []
-for i in range(0,len(consumption4)):
-    temp = fun4(t)
-    result4.append(temp)
-#print(result4)
-
-result5 = []
-for i in range(len(consumption5)-1,-1,-1):
-    temp = consumption5[i]
-    result5.append(temp)
-#print(result5)
-
-result = result1+result2+result3+result4+result5
-
-print(result)
-print(max(result))
-
-print(len(result))
-
-yy = pd.DataFrame(result)
-
-writer = pd.ExcelWriter('result.xlsx')
+writer = pd.ExcelWriter('bad_result.xlsx')
 
 yy.to_excel(writer,'Sheet1')
 
