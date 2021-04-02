@@ -19,7 +19,7 @@ tempearture = np.array(tempearture)
 tempearture = tempearture.tolist()
 #print(tempearture)
 list = []
-for i in range(0,20):
+for i in range(0,600):
     list += tempearture
 #    
 print(len(list))
